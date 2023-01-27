@@ -15,3 +15,7 @@ for word in eng_dict:
 eng_dict_kyes = eng_dict.keys()
 for key in eng_dict_kyes:
     print('eng_dict의 key: {}'.format(key))
+
+eng_dict_kyes = eng_dict.keys()
+for key in eng_dict_kyes:
+    print('eng_dict의 key: {}'.format(key))
