@@ -81,18 +81,22 @@ while True:
 
 print('회원가입 완료!')
 
-
 # 로그인 아이디
 while True:
     loginId = input('아이디를 입력하세요 >>> ')
     if id == loginId:
         break
-    print('> 패쓰워드가 일치하지 않습니다.')
+    print('> 아이디가 일치하지 않습니다.')
+
+# 로그인 패쓰워드
+while True:
+    loginPwd = input('패쓰워드를 입력하세요 >>> ')
+    if pwd == loginPwd:
+        break
+    print('> 패쓰워드 일치하지 않습니다.')
 
 print('로그인 성공!')
 print('{}님 환영합니다. :)'.format(id))
-
-
 
 
 
