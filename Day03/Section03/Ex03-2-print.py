@@ -12,6 +12,6 @@ print("안녕", end='')
 print("하세요")
 
 fos = open('sample.py', mode='wt')
-print('print("Hello World")', file=fos)
+print('print("Hello World")', file=fos)  # fos.write('print("Hello World")')
 fos.close()
 
