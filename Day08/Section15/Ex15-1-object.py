@@ -40,8 +40,26 @@ desktop.cpu = 'i9'
 desktop.hardware_info()
 
 print()
-mackbook = Computer()
-mackbook.set_spec('M2', '16GB', 'M2', '512GB')
-mackbook.hardware_info()
+macbook = Computer()
+macbook.set_spec('M2', '16GB', 'M2', '512GB')
+macbook.hardware_info()
+
+
+lggram = Computer()
+lggram.set_spec('i5', '16GB', '내장VGA', '512GB')
+lggram.hardware_info()
+
+print(type(desktop))
+print(type(macbook))
+print(type(lggram))
+
+
+str1 = "안녕하세요"
+str2 = "안녕못해요"
+print(type(str1))
+print(type(str2))
+
+
+
 
 
