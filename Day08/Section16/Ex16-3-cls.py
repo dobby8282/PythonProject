@@ -44,6 +44,8 @@ bag2 = Bag()
 bag3 = Bag()
 print('현재 가방: {}개'.format(Bag.remain_bag()))
 
+Bag.slogan()
+
 
 
 

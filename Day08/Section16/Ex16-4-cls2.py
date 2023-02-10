@@ -58,7 +58,6 @@ print('>>>>>>>>>>><<<<<<<<<<<<')
 
 HoldemPlayer.set_card3('DiaK')
 
-
 print('2Round Plyaer 1 카드정보 >>>>  ')
 player1.get_card_info()
 print('>>>>>>>>>>><<<<<<<<<<<<')
