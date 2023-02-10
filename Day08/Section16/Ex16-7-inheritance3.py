@@ -6,7 +6,7 @@ class Car:
 
     max_oil = 50    # 최대 주유량
 
-    def __init__(self, oil):
+    def __init__(self, oil):    # 생성자 - 객체가 생성되기 직전에 실행
         self.oil = oil
 
     def add_oil(self, oil):
@@ -25,7 +25,7 @@ class Hybrid(Car):
     max_battery = 30
 
     def __init__(self, oil, battery):
-        super().__init__(oil)
+        super().__init__(oil)   #  self.oil = oil 같음
         self.battery = battery
 
     def charge(self, battery):
@@ -36,7 +36,7 @@ class Hybrid(Car):
             self.battery = Hybrid.max_battery
 
     def hybrid_info(self):
-        super().car_info()
+        super().car_info()  # print('현재 주유상태: {}'.format(self.oil))
         print('현재 충전상태: {}'.format(self.battery))
 
 
@@ -44,22 +44,6 @@ car = Hybrid(0, 0)
 car.add_oil(100)
 car.charge(50)
 car.hybrid_info()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
