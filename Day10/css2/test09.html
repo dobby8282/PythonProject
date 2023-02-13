@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<title>margin 속성을 이용한 여백 지정</title>
+<style type="text/css">
+	p{
+		border: 1px solid red; /* 경계선의 속성을 연속으로 지정할수 있다 */
+		background: yellow;
+	}
+	.box1{ margin:30px; }  /* 상하좌우 에적용 */
+	.box2{ margin: 20px 30px; } /* 상하 : 20  좌우 : 30 */
+	.box3{ margin: 20px 50px 30px; } /* 상 : 20, 좌우: 50, 하: 30 */
+	.box4{ margin: 20px 30px 50px 70px; } /* 상우하좌 에 적용 */
+</style>
+</head>
+<body>
+	<p class="box1">박스 1 입니다</p>
+	<p class="box2">박스 2 입니다</p>
+	<p class="box3">박스 3 입니다</p>
+	<p class="box4">박스 4 입니다</p>
+</body>
+</html>
+
+

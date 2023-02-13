@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<!-- 외부 자바 스크립트 포함 시키기(ArrayList 의 생성자 함수를 사용하기 위해)-->
+<script type="text/javascript" src="js/guraUtil.js"></script>
+<script type="text/javascript">
+	var context ;
+	//배경화면의 y 좌표
+	var back1Y = 0,back2Y = -600;
+	//배경이미지
+	var backImg=new Image();
+	backImg.src="images/space.jpg";
+	//비행기의 이미지
+	var ship=new Image();
+	ship.src="images/gunship5.png";
+	//비행기의 좌표
+	var shipX=200, shipY=500; //초기 좌표
+	//미사일 이미지
+	var missile=new Image();
+	missile.src="images/missile1.png";
+	//미사일의 y 방향 속도
+	var speedMissile= -10;
+	//미사일 객체를 담을 ArrayList
+	var missList=new ArrayList();
+	
+	//새(enemy) 객체를 담을 ArrayList 
+	var birdList=new ArrayList();
+	//새 이미지 로딩하기
+	var redBird=new Image()
+	redBird.src="images/redbird.png";
+	var yellowBird=new Image()
+	yellowBird.src="images/yellowbird.png";
+	//새의 이미지를 저장하고 있는 배열
+	var birdImgs=[redBird, yellowBird];
+	//새 비명소리
+	var birdScream=new Audio("sounds/birddie.mp3");
+	var point=0; //잡은 새의 수
+	var birdCount=0; // 새의수 
+	//윈도우 로딩이 끝났을때 호출되는 함수.
+	window.onload=function(){
+		var canvas=document.getElementById("myCanvas");
+		context = canvas.getContext("2d");
+		//마우스 이벤트 등록 하기
+		document.body.onmousedown = checkPosition ; 
+		document.body.onmousemove = checkPosition2 ;
+		//화면 렌더링 하는 함수 호출하기.
+		setInterval(drawCanvas, 50); // 50/1000 초마다 화면을 다시 렌더링한다.
+	}
+	//onmousedown 이벤트에서는 미사일을 만든다.
+	function checkPosition(e){
+		//클릭이 일어난곳의 nodeName 을 얻어온다.
+		var target = e.target.nodeName;
+		if( target != "CANVAS")return; //캔바스 영역이 아니라면 메소드 종료
+		//미사일 객체(연관배열) 만들기
+		var m = { x : shipX, y : shipY };
+		//만든 객체를 저장한다.
+		missList.add(m);
+		
+	}
+	//조이스틱의 상태값을 저장할수 있는 변수 선언하고 초기값 대입
+	var stickState = "none";
+	
+	//onmousemove 이벤트가 일어났을때는 어디 영역에 들어왔는지 체크한다.
+	function checkPosition2(e){
+		stickState = "none"; //호출될때마다 초기화 해준다.
+		//클릭이 일어난곳의 nodeName 을 얻어온다.
+		var target = e.target.nodeName;
+		if( target != "CANVAS")return; //캔바스 영역이 아니라면 메소드 종료
+		//이벤트가 일어난 곳의 좌표 알아오기.
+		var eventX=e.offsetX;
+		var eventY=e.offsetY;
+		//leftup
+		if( eventX > 0 && eventX < 50 && eventY > 450 && eventY < 500){
+			stickState = "leftup";
+		}
+		//up
+		if( eventX > 50 && eventX < 100 && eventY > 450 && eventY < 500){
+			stickState = "up";
+		}
+		//up
+		if( eventX > 100 && eventX < 150 && eventY > 450 && eventY < 500){
+			stickState = "rightup";
+		}
+		//left
+		if( eventX > 0 && eventX < 50 && eventY > 500 && eventY < 550){
+			stickState = "left";
+		}
+		//none
+		if( eventX > 50 && eventX < 100 && eventY > 500 && eventY < 550){
+			stickState = "none";
+		}
+		//right
+		if( eventX > 100 && eventX < 150 && eventY > 500 && eventY < 550){
+			stickState = "right";
+		}
+		
+		//leftdown
+		if( eventX > 0 && eventX < 50 && eventY > 550 && eventY < 600){
+			stickState = "leftdown";
+		}
+		//down
+		if( eventX > 50 && eventX < 100 && eventY > 550 && eventY < 600){
+			stickState = "down";
+		}
+		//down
+		if( eventX > 100 && eventX < 150 && eventY > 550 && eventY < 600){
+			stickState = "rightdown";
+		}
+		if(stickState != "none")moveToShip();
+	}
+	//비행기 움직이는 함수
+	function moveShip(){
+		var sqrtValue=Math.sqrt(5);
+		switch(stickState){
+		case "none": return;
+		case "leftup" : 
+			shipX -=sqrtValue;
+			shipY -=sqrtValue;
+			break;
+		case "up" :
+			shipY -=5;
+			break;
+		case "rightup" : 
+			shipX +=sqrtValue;
+			shipY -=sqrtValue;
+			break;
+		case "left" :
+			shipX -=5;
+			break;
+		case "right" :
+			shipX +=5;
+			break;
+		case "leftdown" :
+			shipX -=sqrtValue;
+			shipY +=sqrtValue;
+			break;
+		case "down" :
+			shipY +=5;
+			break;
+		case "rightdown" :
+			shipX +=sqrtValue;
+			shipY +=sqrtValue;
+			break;
+		}
+		//집을 못나가도록
+		if(shipX < 25)shipX=25;
+		if(shipX > 375)shipX=375;
+		if(shipY < 25)shipY=25;
+		if(shipY > 575)shipY=575;
+	}
+	//새를 만드는 함수 정의하기
+	function makeBird(){
+		//새의 이미지를 랜덤하게 하기 위해서
+		var imgIndex=Math.floor(Math.random()*2); // 0 혹은 1 이 나오도록
+		//새의 처음 x 좌표를 랜덤하게 하기 위해서
+		var birdX=Math.round(Math.random()*400);
+		var birdY=0;
+		//새 객체(연관배열) 만들기  x좌표,y좌표,이미지번호,생사여부,에너지
+		var bird={ x : birdX , y : birdY , 
+				img : imgIndex, isDead : false , energy : 100,
+				speedX : 0, speedY : 0, stepX :0, stepY: 0, moveCount:0};
+		//생성한 새 객체를 ArrayList 에 저장한다.
+		birdList.add(bird);
+		birdCount++; //새의 총수를 올린다.
+	}
+	function moveToShip(){
+		for(var i=birdList.size()-1 ; i >= 0 ; i--){
+			//새의 최종 목적지.
+			targetX=shipX;  
+			targetY=shipY;
+			
+			//최종 목적지와 새 사이의 x축방향 거리
+			deltaX=targetX-birdList.get(i).x;
+			//최종 목적지와 현재 풍선사이의 y축방향 거리
+			deltaY=targetY-birdList.get(i).y;
+			
+			//각각의 거리를 100 등분
+			stepX=deltaX/100.0;
+			stepY=deltaY/100.0;
+			birdList.get(i).stepX=stepX;
+			birdList.get(i).stepY=stepY;
+			//100등분한 거리를 몇번 움직였는지 표시할 변수
+			birdList.get(i).moveCount=0;
+		}
+	}
+	
+	//새에 관한 처리를 하는 함수만들기 
+	function moveBird(){
+		for(var i=birdList.size()-1 ; i >=0 ; i--){
+			var tmp=birdList.get(i);
+			if(tmp.isDead){
+				birdList.remove(i); //제거할 새는 제거하기
+				birdCount--; //새 줄이기
+			}
+			//새를 ship 을 목표로 해서 움직인다.
+			if(tmp.moveCount != 100){
+				tmp.x += tmp.stepX;
+				tmp.y += tmp.stepY;
+				tmp.moveCount++;
+			}
+			
+		}
+		//일정 확률로 새가 만들어지도록 한다.
+		var ranNum = Math.floor(Math.random()*20);
+		if(ranNum == 9 && birdCount < 10 )makeBird();
+	}
+	//새와 미사일이 충돌했는지 검사해서 처리하기
+	function checkBird(){
+		
+		for(var i = birdList.size()-1 ; i >= 0 ; i--){
+			var minX = birdList.get(i).x-25;
+			var maxX = birdList.get(i).x+25;
+			var minY = birdList.get(i).y-25;
+			var maxY = birdList.get(i).y+25;
+			//모든 미사일에 대해서 검사 하기 위해
+			for(var j = missList.size()-1 ; j >= 0 ; j--){
+				//j 번째 인덱스에 해당하는 미사일의 좌표를 얻어온다.
+				var mX=missList.get(j).x; // 미사일의 x좌표
+				var mY=missList.get(j).y; // 미사일의 y좌표
+				//어느 영역인지 판단한다.
+				if( mX > minX && mX < maxX && mY > minY && mY < maxY){
+					// i 번째 인덱스의 새는 j 번째 인덱스의 총알을 맞았다.
+					//1. 새의 에너지를 줄인다.
+					birdList.get(i).energy -= 70;
+					//2. 뒤로 살짝 밀리게 한다.
+					birdList.get(i).y -= 10;
+					//3. 비명을 지른다.
+					birdScream.currentTime=0;
+					birdScream.play();
+					//4. j번째 인덱스의 총알을 제거한다.
+					missList.remove(j);
+					//5. 에너지가 0 보다 작은 새는 isDead 를 true 로 바꿔준다.
+					if(birdList.get(i).energy < 0){
+						birdList.get(i).isDead=true;
+						point++; //점수를 올린다.
+					}
+				}//if
+			}//for
+			
+		}//for
+	}
+	//isDead 가 true 인 새를 제거하는 함수
+	function removeBird(){
+		//반복문 돌면서 모든 새를 검사한다.
+		for(var i=birdList.size()-1 ; i >= 0 ; i--){
+			if(birdList.get(i).isDead){//제거해야 한다면
+				//제거한다.
+				birdList.remove(i);
+			}
+		}
+	}
+	
+	//화면 렌더링하는 함수
+	function drawCanvas(){
+		//배경화면 그리기
+		context.drawImage( backImg, 0, back1Y, 400, 600 );
+		context.drawImage( backImg, 0, back2Y, 400, 600 );
+		//점수표시하기
+		context.font="20px sans-serif";
+		context.fillStyle="yellow";
+		context.fillText("Point :"+point, 10, 30);
+		//현재 상태 저장
+		context.save();
+		//알파값 지정
+		context.globalAlpha = 0.3;
+		//왼쪽 조이스틱 영역 그리기
+		context.strokeStyle="yellow";
+		context.fillStyle="red";
+		//외곽선 노란색으로 먼저 그리기
+		context.strokeRect(0, 450, 50, 50);  //leftup
+		context.strokeRect(50, 450, 50, 50);  //up
+		context.strokeRect(100, 450, 50, 50);  //rightup
+		context.strokeRect(0, 500, 50, 50);   //left
+		context.strokeRect(50, 500, 50, 50);  //none
+		context.strokeRect(100, 500, 50, 50); //right;
+		context.strokeRect(0, 550, 50, 50);	//leftdown
+		context.strokeRect(50, 550, 50, 50);  //down
+		context.strokeRect(100, 550, 50, 50);  //rightdown
+		//stickState 의 값에 따라 다른 위치에 색을 칠하도록 처리
+		switch(stickState){
+		case "leftup" :
+			context.fillRect(0, 450, 50, 50); break;
+		case "up" :
+			context.fillRect(50, 450, 50, 50); break;
+		case "rightup" :
+			context.fillRect(100, 450, 50, 50);break;
+		case "left" :
+			context.fillRect(0, 500, 50, 50);break;
+		case "none" :
+			context.fillRect(50, 500, 50, 50);break;
+		case "right" :
+			context.fillRect(100, 500, 50, 50);break; 
+		case "leftdown" :
+			context.fillRect(0, 550, 50, 50);	break;
+		case "down" :
+			context.fillRect(50, 550, 50, 50);break;
+		case "rightdown" :
+			context.fillRect(100, 550, 50, 50);break;
+		}
+		context.restore();//컨텍스트 되돌리기
+		
+		//미사일이 있다면 그리기
+		for(var i=0 ; i < missList.size() ; i++){
+			context.drawImage(missile, 
+					missList.get(i).x,
+					missList.get(i).y,
+					5,10);
+		}
+		//새 그리기
+		for(var i=0 ; i < birdList.size() ; i++){
+			context.drawImage( 
+					birdImgs[ birdList.get(i).img ], //새 이미지
+					birdList.get(i).x-25, //x좌표
+					birdList.get(i).y-25, //y좌표
+					50, 50); //폭과 높이(크기)                 
+		}
+		
+		//비행기 그리기
+		context.drawImage( ship, shipX-25, shipY-25, 50, 50);
+		
+		//배경화면 스크롤 관련 처리
+		back1Y += 2;
+		back2Y += 2;
+		if(back1Y == 600){
+			back1Y = -600;
+			back2Y = 0 ;
+		}
+		if(back2Y == 600){
+			back2Y = -600;
+			back1Y = 0 ;
+		}
+		moveMissile(); //미사일관련 처리하는 함수 호출
+		moveShip(); //비행기 움직이는 함수 호출
+		moveBird(); //새를 움직이고
+		checkBird(); //새를 체크한다.
+		removeBird(); //새를 제거하기 위해
+	}
+	//미사일 관련처리 하는 함수
+	function moveMissile(){
+		for(var i=0 ; i < missList.size() ; i++){
+			//미사일의 속도를 y 좌표에 반영한다.
+			missList.get(i).y += speedMissile;
+		}
+		for(var i = missList.size()-1 ; i >= 0 ; i--){
+			if(missList.get(i).y < 0){
+				//배열에서 제거한다.
+				missList.remove(i);
+			}
+		}
+	}
+	//배경음악 로딩하기.
+	var backSound=new Audio("sounds/backsound.mp3");
+	//배경음악 컨트롤
+	function musicControl(arg){
+		if(arg=="play"){
+			//재생하기.
+			backSound.play();
+		}else if(arg=="stop"){
+			backSound.currentTime=0;
+			backSound.pause();
+		}
+	}
+	
+</script>
+</head>
+<body>
+<div>
+	<canvas id="myCanvas" width="400" height="600"></canvas>
+	<canvas id="myCanvas1" width="400" height="600"></canvas>
+</div>
+<button onclick="musicControl('play')">play</button>
+<button onclick="musicControl('stop')">stop</button>
+<div id="console"></div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+

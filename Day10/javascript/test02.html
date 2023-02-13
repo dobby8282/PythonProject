@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바 스크립트 테스트2</title>
+    <script type="text/javascript">
+	function show(){
+		//document 기본 객체를 이용해서 id 값이 txt1 인 객체의 참조값을 얻어온다.
+		var input_text = document.getElementById("txt1");
+		//객체에 현재 들어있는 문자열을 읽어온다.
+		var str = input_text.value;
+		//읽어온 내용 출력하기
+		alert("입력한 내용:"+str);
+		//입력한 내용 지우기
+		input_text.value="";
+	}
+
+    </script>
+</head>
+<body>
+<input type="text" id="txt1"/><br/>
+<button onclick="show()">전송</button>
+</body>
+</html>
+
+
+
+
+

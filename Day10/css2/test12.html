@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+<title>clear 를 이용한 float 해제</title>
+<style type="text/css">
+	p{border: 1px solid red; background: yellow;}
+	img{ border: 1px solid blue; padding: 10px;}
+	.imgBox img{ float: left;}
+	.textBox{ clear: both;}
+</style>
+</head>
+<body>
+	<h1>float 속성 테스트 입니다.</h1>
+	<p class="imgBox">이미지를 왼쪽으로 플로트 시키면 부모요소인 p 요소는  텍스트만 
+	자식 요소로 가지게 됩니다.
+		<img src="images/waffle.jpg" width="150" height="150"/>
+	</p>
+	<p class="textBox">
+		플로트를 이용하면 컨텐츠를 이동시키는 것이 가능합니다. 또 플로트는 일반적인 블록박스
+		의 흐흠을 벗어나 배치되기 때문에 다른 블록 박스의 배치에 영향을 주게 됩니다.
+		속성으로는 left, right, none 이 있습니다.
+	</p>	
+</body>
+</html>
+
+

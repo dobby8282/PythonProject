@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>자바 스크립트</title>
+    <script type="text/javascript">
+	//전역변수 선언하고 값 대입하기. (전역변수는 앞에 var 을 선언한다.)
+	var count=0;
+	//함수에 해당된다.
+	function showAlert(){
+		count++; //카운트 증가 시키기
+		alert("버튼을 "+count+" 번  눌렀네?");
+	}
+	
+
+    </script>
+</head>
+<body>
+<button onclick="showAlert()">눌러보세요!</button>
+</body>
+</html>
