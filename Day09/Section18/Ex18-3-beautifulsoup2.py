@@ -7,15 +7,15 @@ import requests
 from bs4 import BeautifulSoup
 
 url = 'https://news.naver.com/main/ranking/popularDay.naver'
-# param = {}
-response = requests.get(url)
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'}
+response = requests.get(url, headers=headers)
 html = response.text
-print(response.status_code)
+soup = BeautifulSoup(html, 'html.parser')
+review_list = soup.find_all('div', class_='list_content')
 
+news_in = []
+for result in review_list:
+    news_in.append(result.text.strip())
 
-# soup = BeautifulSoup(html, 'html.parser')
-#
-# review_list = soup.find_all('div', class_='score_reple')
-#
-# for review in review_list:
-#     print(review.find('p').text.strip())
+for rank in news_in:
+    print(rank)
