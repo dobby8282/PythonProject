@@ -44,9 +44,6 @@ class LinearList():
         # 삭제 구현하기!
 
 
-
-
-
     def print_list(self):
         linear = self.linear
         for list in linear:
