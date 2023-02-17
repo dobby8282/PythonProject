@@ -21,6 +21,8 @@
         원하는 요소가 삭제된 후 빈칸을 그대로 두지 않고 뒤의 요소들을 앞으로 한칸씩 이동시킨다.
 
 '''
+
+
 class LinearList():
     def __init__(self):
         self.linear = []
@@ -33,21 +35,41 @@ class LinearList():
 
     def insert_data(self, position, data):
         linear = self.linear
-        # 포지션 삽입 구현하기!
+        if position < 0 or position > len(linear):  # 유효성 검사
+            print('데이터를 삽입할 범위를 벗어났습니다.')
+            return
 
-        # 힌트 for문
-        # for i in range(lLen - 1, position, -1):
+        linear.append(None)  # 빈칸 추가
+        linearSize = len(linear)  # 배열의 현재 크기
 
+        for i in range(linearSize - 1, position, -1):
+            linear[i] = linear[i - 1]
+            linear[i - 1] = None
 
-    def delete_date(self, position):
+        linear[position] = data
+
+    def delete_data(self, position):
         linear = self.linear
-        # 삭제 구현하기!
+
+        if position < 0 or position > len(linear):  # 유효성 검사
+            print('데이터를 삽입할 범위를 벗어났습니다.')
+            return
+
+        linear[position] = None
+        linearSize = len(linear)
+
+        for i in range(position + 1, linearSize):
+            linear[i - 1] = linear[i]
+            linear[i] = None
+
+        del(linear[linearSize - 1])
 
 
     def print_list(self):
         linear = self.linear
         for list in linear:
             print(list)
+
 
 # 실행코드
 linear = LinearList()
@@ -57,5 +79,10 @@ linear.add_data(4)
 linear.add_data(2)
 linear.add_data(6)
 
+linear.insert_data(3, 99)
+
+linear.delete_data(2)
+
 linear.print_list()
+
 
