@@ -24,6 +24,7 @@ class BinarrySearchTree(object):
         return self.root is not None
 
     def _insert_value(self, node, data):
+
         if node is None:
             node = Node(data)
         else:
