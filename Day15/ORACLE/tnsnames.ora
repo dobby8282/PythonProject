@@ -1,0 +1,14 @@
+HRDB = 
+  (DESCRIPTION = 
+    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 31521))
+    (CONNECT_DATA = 
+      (SID = xe) 
+    ) 
+  ) 
+HRDB_SERVICE = 
+  (DESCRIPTION = 
+    (ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT = 31521))
+    (CONNECT_DATA = 
+      (SERVICE_NAME = xe) 
+    ) 
+  ) 
