@@ -16,9 +16,6 @@ CREATE TABLE HR.PY_BOARD (
 
 CREATE SEQUENCE "PY_BOARD_SEQ";
 
-
-
-
 '''
 
 # 데이터베이스 접속 정보
