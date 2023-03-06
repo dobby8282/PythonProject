@@ -1,5 +1,5 @@
 /*
-파일명 : HR-Day03-Select.sql
+
 SQL (Structured Query Language) - 구조적 질의 언어
     관계형 데이터베이스 시스템(RDBMS)에서 자료를 관리 및 처리하기 위해 설계된 언어
     
