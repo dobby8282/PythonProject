@@ -27,7 +27,8 @@ sid = 'xe'
 dsn = cx_Oracle.makedsn(host, port, sid)
 
 class BoardApp(tk.Tk):
-    def __init__(self):
+    def __init__(self): # 생성자
+        print('BoardApp.__init__')
         super().__init__()
 
         self.title('BoardApp')
@@ -66,6 +67,7 @@ class BoardApp(tk.Tk):
         self.init_boardlist()
 
     def get_boardlist(self, keyword='', search_option=''):
+        print(BoardApp.get_boardlist)
         # 데이터베이스 연결
         conn = cx_Oracle.connect(username, password, dsn)
         cur = conn.cursor()
@@ -77,7 +79,8 @@ class BoardApp(tk.Tk):
             where_clause = "WHERE BOARD_TITLE LIKE '%' || :1 || '%'"
 
         # SQL 문 실행
-        sql = f"SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_DATE FROM PY_BOARD {where_clause} ORDER BY BOARD_ID DESC"
+        sql = f"SELECT BOARD_ID, BOARD_TITLE, BOARD_WRITER, BOARD_DATE FROM PY_BOARD " \
+              f"{where_clause} ORDER BY BOARD_ID DESC"
         cur.execute(sql, (keyword,))
 
         rows = []
@@ -92,6 +95,7 @@ class BoardApp(tk.Tk):
         return rows
 
     def init_boardlist(self):
+        print('BoardApp.init_boardlist')
         # 게시글 목록 조회
         rows = self.get_boardlist()
 
@@ -108,12 +112,15 @@ class BoardApp(tk.Tk):
         self.combobox_search['values'] = ('제목', '작성자')
         self.combobox_search.current(0)
 
-    def onclick_search(self):
+    def onclick_search(self):   # 검색버튼 클릭
+        print('BoardApp.onclick_search')
         # 검색어 가져오기
         keyword = self.textfield_search.get()
+        print('keyword : ', keyword)
 
         # 검색 기준 가져오기
         search_option = self.combobox_search.get()
+        print('search_option : ', search_option)
 
         # 검색 실행
         rows = self.get_boardlist(keyword, search_option)
@@ -124,9 +131,10 @@ class BoardApp(tk.Tk):
         # 게시글 목록 출력
         for i, row in enumerate(rows):
             num = len(rows) - i
-            self.treeview_boardlist.insert('', 'end', text=str(num), values=row[:3])
+            self.treeview_boardlist.insert('', 'end', text='', values=row)
 
     def onclick_insert(self):
+        print('BoradApp.onclick_insert')
         # 글쓰기 창 열기
         insert_dialog = BoardInsertDialog(self)
         self.wait_window(insert_dialog)
@@ -216,7 +224,7 @@ class BoardApp(tk.Tk):
         self.wait_window(view_dialog)
 
 class BoardInsertDialog(tk.Toplevel):
-    def __init__(self, parent):
+    def __init__(self, parent): # 생성자
         super().__init__(parent)
 
         self.title('새 글 쓰기')
@@ -300,6 +308,7 @@ class BoardViewDialog(tk.Toplevel):
 
 class BoardUpdateDialog(tk.Toplevel):
     def __init__(self, parent, row, contents):
+        print('BoardUpdateDialog.__init__')
         super().__init__(parent)
 
         self.title('게시글 수정')
@@ -361,7 +370,7 @@ class BoardUpdateDialog(tk.Toplevel):
         # 게시글 목록 초기화
         self.master.init_boardlist()
 
-
+# 실행코드
 if __name__ == '__main__':
     app = BoardApp()
     app.mainloop()
